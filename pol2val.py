@@ -13,8 +13,8 @@ def main(scoring):
 	test = 1
 	if scoring:
 		with open('scoring.tex', 'w') as sfile:
-			print('\\begin{center}\n\\begin{tabular}{|c|c|c|c|c|}\n\\hline', file=sfile)
-			print('\\textbf{Группа} & \\textbf{Ограничения} & \\textbf{Баллы} & \\textbf{Необходимые группы} \\\\ \\hline', file=sfile)
+			print('\\begin{center}\n\\renewcommand{\\arraystretch}{1.5}\n\\begin{tabular}{|c|c|c|c|}\n\\hline', file=sfile)
+			print('\\textbf{Группа} & \\textbf{Баллы} & \\textbf{Доп. ограничения} & \\textbf{Необх. группы} \\\\ \\hline', file=sfile)
 	for row in table:
 		cols = row.select('td')
 		group, tests, score, policy, _, requires, _ = cols
@@ -31,7 +31,7 @@ def main(scoring):
 		x = list(map(lambda x: x.text.strip(), filter(lambda x: x.get('style') != 'display:none;', requires.select('div > span'))))
 		if scoring:
 			with open('scoring.tex', 'a') as sfile:
-				print(f'${group}$ & {"Тесты из условия" if group == 0 else ""} & ${score}$ & {"---" if not x else ", ".join(map(lambda y: "$" + y + "$", x))} \\\\ \\hline', file=sfile)
+				print(f'${group}$ & ${score}$ & {"тесты из условия" if group == 0 else ""} & {"---" if not x else ", ".join(map(lambda y: "$" + y + "$", x))} \\\\ \\hline', file=sfile)
 		print(f'{TAB}requires {",".join(x)};') if x else None
 		print('}')
 		print()
