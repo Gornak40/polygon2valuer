@@ -8,7 +8,7 @@ It supports EACH_TEST and COMPLETE_GROUP score policies, dependencies and ignore
 ### Install
 1. Run ```python -m venv venv```.
 2. Run ```source venv/bin/activate```.
-3. Run ```pip install -r requierements.txt```.
+3. Run ```pip install -r requirements.txt```.
 
 ### Usage
 
@@ -18,3 +18,8 @@ It supports EACH_TEST and COMPLETE_GROUP score policies, dependencies and ignore
 4. Run tool and paste copied html to stdin.
 5. Press ```Ctrl+D```.
 6. Congratulations!
+
+## Autoscoring
+
+1. Run ```python pol2val.py -s```.
+2. You will get ```scoring.tex``` with template for problem scoring.
