@@ -1,15 +1,20 @@
 #!venv/bin/python
 from bs4 import BeautifulSoup
 from sys import stdin, stderr
-from click import command
+from click import command, option
 
 
 @command('pol2val', help='Put html page from polygon/tests in stdin. Page must contain #testGroupsTable table.')
-def main():
+@option('--scoring', '-s', is_flag=True, help='Create scoring.tex temlpate.')
+def main(scoring):
 	TAB = ' ' * 4
 	bs = BeautifulSoup(stdin.read(), features='lxml')
 	table = bs.select('#testGroupsTable > tbody > tr')
 	test = 1
+	if scoring:
+		with open('scoring.tex', 'w') as sfile:
+			print('\\begin{center}\n\\begin{tabular}{|c|c|c|c|c|}\n\\hline', file=sfile)
+			print('\\textbf{Группа} & \\textbf{Ограничения} & \\textbf{Баллы} & \\textbf{Необходимые группы} \\\\ \\hline', file=sfile)
 	for row in table:
 		cols = row.select('td')
 		group, tests, score, policy, _, requires, _ = cols
@@ -24,9 +29,15 @@ def main():
 		else:
 			print(f'{TAB}test_score {score // tests};')
 		x = list(map(lambda x: x.text.strip(), filter(lambda x: x.get('style') != 'display:none;', requires.select('div > span'))))
+		if scoring:
+			with open('scoring.tex', 'a') as sfile:
+				print(f'${group}$ & {"Тесты из условия" if group == 0 else ""} & ${score}$ & {"---" if not x else ", ".join(map(lambda y: "$" + y + "$", x))} \\\\ \\hline', file=sfile)
 		print(f'{TAB}requires {",".join(x)};') if x else None
 		print('}')
 		print()
+	if scoring:
+		with open('scoring.tex', 'a') as sfile:
+			print('\\end{tabular}\n\\end{center}\n', file=sfile)
 
 
 if __name__ == '__main__':
