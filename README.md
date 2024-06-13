@@ -1,4 +1,6 @@
 # polygon2valuer
+**This project is archived. Use [algolymp/valeria](https://github.com/Gornak40/algolymp#valeria) instead.**
+
 Simple tool for converting polygon tests to valuer.cfg (ejudge format). 
 
 It works only when groups are ordered and each test belongs to only one group.
